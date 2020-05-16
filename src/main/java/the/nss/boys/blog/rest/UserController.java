@@ -42,7 +42,7 @@ public class UserController{
     }
 
     
-    @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value="/register",method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> register(@RequestBody User user) {
         userService.persist(user);
         LOG.debug("User {} successfully registered.", user);
