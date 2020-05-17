@@ -23,14 +23,15 @@ class Login extends React.Component {
             body: JSON.stringify(data)
         }).then((data) => {
             if (data.status === 202 && data.ok) {
-                this.login(data);
+                
+                data.json().then(data => this.props.userLoggedIn(data));
             }
         }).catch(error => { console.log(error) });
     }
 
-    login = async (data) => {
-        console.log(data);
-        await fetch('http://localhost:8080/api/users/current', { credentials: "include" }).then((resp) => {
+    login = (data) => {
+        fetch('http://localhost:8080/api/users/current', {
+        }).then((resp) => {
             resp.json().then((data) =>
                 this.props.userLoggedIn(data))
         });
@@ -57,7 +58,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         userLoggedIn: (user) => {
             dispatch({ type: 'LOGGING_IN', user: user });
-        },
+        }
     }
 }
 
