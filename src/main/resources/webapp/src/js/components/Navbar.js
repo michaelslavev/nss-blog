@@ -1,12 +1,10 @@
 import React from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import Link from 'react-router-dom/Link';
 
 class Navbar extends React.Component {
 
-
-
-    componentDidMount(){
+    componentDidMount() {
     }
 
     render() {
@@ -16,7 +14,7 @@ class Navbar extends React.Component {
                     <ul>
                         <li><Link to={'/'}>Homepage</Link></li>
                         <li><Link to={'/login'}>Login</Link></li>
-                        {this.props.loggedIn?<li><Link to={'/j_spring_security_logout'}>Logout</Link></li>:null}
+                        {this.props.loggedIn ? <li><Link to={'/j_spring_security_logout'} onClick={this.props.logout}>Logout</Link></li> : null}
                         <li><a>4</a></li>
                         <li><a>5</a></li>
                         <li><a>6</a></li>
@@ -28,10 +26,17 @@ class Navbar extends React.Component {
     }
 }
 
-const mapStateToProps = (state,ownProps) => {
-    return{
+const mapStateToProps = (state, ownProps) => {
+    return {
         loggedIn: state.loggedIn
     }
 }
 
-export default connect(mapStateToProps)(Navbar);
+const mapDispatchToProps = (dispatch) => {
+    return {
+        logout: () => {
+            dispatch({ type: 'LOGOUT'});
+        }
+    }
+}
+export default connect(mapStateToProps,mapDispatchToProps)(Navbar);

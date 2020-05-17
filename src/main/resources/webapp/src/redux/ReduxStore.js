@@ -1,16 +1,24 @@
 const initState = {
-    loggedIn: false,
-    user:{}
+    loggedIn: sessionStorage.getItem("loggedin") || false,
+    user: sessionStorage.getItem("user") || null
 }
 
 const rootReducer = (state = initState, action) => {
 
     if(action.type == 'LOGGING_IN'){
-        console.log(action.user);
+        sessionStorage.setItem("user",JSON.stringify(action.user));
+        sessionStorage.setItem("loggedin", true);
         return{
             ...state,
             loggedIn: true,
             user:action.user
+        }
+    } else if(action.type == 'LOGOUT'){
+        sessionStorage.clear();
+        return {
+            ...state,
+            loggedIn:false,
+            user:null
         }
     }
 
