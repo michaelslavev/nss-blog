@@ -15,7 +15,7 @@ class Login extends React.Component {
         }
 
         let response1;
-        fetch('http://localhost:8080/api/users/login', {
+        fetch('/api/users/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -30,7 +30,7 @@ class Login extends React.Component {
     }
 
     login = (data) => {
-        fetch('http://localhost:8080/api/users/current', {
+        fetch('/api/users/current', {
         }).then((resp) => {
             resp.json().then((data) =>
                 this.props.userLoggedIn(data))
