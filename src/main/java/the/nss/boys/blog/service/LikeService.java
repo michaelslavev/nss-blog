@@ -5,6 +5,7 @@
  */
 package the.nss.boys.blog.service;
 
+import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import the.nss.boys.blog.dao.LikeDao;
 import the.nss.boys.blog.model.Article;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@CacheConfig(cacheNames = "likes")
 public class LikeService {
     
     private final LikeDao dao;
@@ -34,7 +36,7 @@ public class LikeService {
     }
     
     @Transactional(readOnly = true)
-    @Cacheable("findAllLikes")
+    @Cacheable()
     public List<Like> findAll() {
         return dao.findAll();
     }

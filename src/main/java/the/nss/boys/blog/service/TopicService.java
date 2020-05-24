@@ -8,6 +8,7 @@ package the.nss.boys.blog.service;
 import java.util.List;
 import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,7 @@ import the.nss.boys.blog.model.Article;
 import the.nss.boys.blog.model.Topic;
 
 @Service
+@CacheConfig(cacheNames = "topics")
 public class TopicService {
     
     private final TopicDao dao;
@@ -29,7 +31,7 @@ public class TopicService {
     }
     
     @Transactional(readOnly = true)
-    @Cacheable("findAllTopics")
+    @Cacheable()
     public List<Topic> findAll() {
         return dao.findAll();
     }
