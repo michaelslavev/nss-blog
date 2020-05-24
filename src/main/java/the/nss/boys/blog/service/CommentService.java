@@ -5,6 +5,7 @@
  */
 package the.nss.boys.blog.service;
 
+import org.springframework.cache.annotation.Cacheable;
 import the.nss.boys.blog.dao.CommentDao;
 import the.nss.boys.blog.model.Article;
 import the.nss.boys.blog.model.Comment;
@@ -12,8 +13,6 @@ import java.util.List;
 import java.util.Objects;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-
 
 @Service
 public class CommentService {
@@ -35,6 +34,7 @@ public class CommentService {
     }
     
     @Transactional(readOnly = true)
+    @Cacheable("findAllComments")
     public List<Comment> findAll() {
         return dao.findAll();
     }

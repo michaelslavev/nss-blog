@@ -5,6 +5,7 @@
  */
 package the.nss.boys.blog.service;
 
+import org.springframework.cache.annotation.Cacheable;
 import the.nss.boys.blog.dao.LikeDao;
 import the.nss.boys.blog.model.Article;
 import the.nss.boys.blog.model.Like;
@@ -33,6 +34,7 @@ public class LikeService {
     }
     
     @Transactional(readOnly = true)
+    @Cacheable("findAllLikes")
     public List<Like> findAll() {
         return dao.findAll();
     }

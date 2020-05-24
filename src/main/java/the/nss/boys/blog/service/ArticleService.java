@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import the.nss.boys.blog.dao.ArticleDao;
@@ -16,7 +17,6 @@ import the.nss.boys.blog.model.Article;
 import the.nss.boys.blog.model.Comment;
 import the.nss.boys.blog.model.Like;
 import the.nss.boys.blog.model.Topic;
-
 
 @Service
 public class ArticleService {
@@ -33,6 +33,7 @@ public class ArticleService {
     }
     
     @Transactional(readOnly = true)
+    @Cacheable("findAllArticles")
     public List<Article> findAll() {
         return dao.findAll();
     }
