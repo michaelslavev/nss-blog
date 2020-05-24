@@ -13,11 +13,9 @@ class Navbar extends React.Component {
                 <nav>
                     <ul>
                         <li><Link to={'/'}>Homepage</Link></li>
-                        <li><Link to={'/login'}>Login</Link></li>
+                        {this.props.loggedIn ? <li><Link to={'/add'}>Add article</Link></li> : null}
+                        {!this.props.loggedIn ? <li><Link to={'/login'}>Login</Link></li> : null}
                         {this.props.loggedIn ? <li><Link to={'/j_spring_security_logout'} onClick={this.props.logout}>Logout</Link></li> : null}
-                        <li><a>4</a></li>
-                        <li><a>5</a></li>
-                        <li><a>6</a></li>
 
                     </ul>
                 </nav>

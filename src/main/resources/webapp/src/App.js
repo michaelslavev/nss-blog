@@ -4,6 +4,7 @@ import {BrowserRouter as Router, Link, Switch, Route} from 'react-router-dom';
 import Homepage from './js/pages/Homepage.js';
 import Login from './js/pages/Login.js'
 import Logout from './js/components/Logout.js';
+import AddArticle from './js/components/AddArticle.js';
 
 
 
@@ -14,6 +15,7 @@ class App extends Component{
           <Route exact path="/" component={Homepage}></Route>
           <Route exact path="/login" component={Login}></Route>
           <Route exact path="/j_spring_security_logout" component={Logout}></Route>
+          <Route exact path="/add" component={AddArticle}></Route>
         </Router>
       );
   }

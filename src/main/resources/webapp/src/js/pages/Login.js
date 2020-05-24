@@ -41,7 +41,7 @@ class Login extends React.Component {
         return (
             <div className="login-wrapper">
                 <Navbar></Navbar>
-                <form onSubmit={this.loginRequest}>
+                <form onSubmit={this.loginRequest} id="login-form">
                     <label htmlFor="username-input">username:</label>
                     <input id="username-input" placeholder="Username"></input>
                     <label htmlFor="password-input">password:</label>
