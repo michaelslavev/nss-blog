@@ -9,8 +9,20 @@ class AddArticle extends React.Component {
 
     submit = (e) =>{
         e.preventDefault();
-        console.log("submit");
-        console.log(this.props.user.id);
+        let body = {
+            title: document.querySelector('input#title-input').value,
+            content: document.querySelector('input#content-input').value
+        };
+        fetch('/api/articles',{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body:JSON.stringify(body)
+        }
+        ).then(data => {
+            console.log(data);
+        })
     }
 
     render() {
@@ -20,12 +32,12 @@ class AddArticle extends React.Component {
                 <Form onSubmit={this.submit}>
                     <Form.Group controlId="formTitle">
                         <Form.Label>Title</Form.Label>
-                        <Form.Control type="text" placeholder="Enter title" />
+                        <Form.Control type="text" placeholder="Enter title" id="title-input"/>
                     </Form.Group>
 
                     <Form.Group controlId="formContent">
                         <Form.Label>Content</Form.Label>
-                        <Form.Control type="text" placeholder="Enter content" />
+                        <Form.Control type="text" placeholder="Enter content" id="content-input"/>
                     </Form.Group>
                     <Button variant="primary" type="submit">
                         Submit

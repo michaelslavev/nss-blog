@@ -9,6 +9,7 @@ import Logo from './blogolo.png';
 class Navigation extends React.Component {
 
     componentDidMount() {
+        console.log(this.props);
     }
 
     render() {
@@ -26,7 +27,7 @@ class Navigation extends React.Component {
                         />{' '}
                     </Navbar.Brand>
                     <Nav className="mr-auto">
-                        {this.props.loggedIn && this.props.isAdmin? <NavLink to="/add">Add Article</NavLink> : null}
+                        {this.props.loggedIn && this.props.user?.role === "ADMIN" ? <NavLink to="/add">Add Article</NavLink> : null}
                     </Nav>
                     <Nav>
                         {!this.props.loggedIn ? <NavLink to="/login">Login</NavLink> : null}
@@ -43,7 +44,7 @@ class Navigation extends React.Component {
 const mapStateToProps = (state, ownProps) => {
     return {
         loggedIn: state.loggedIn,
-        isAdmin: state.user?.role === "ADMIN"
+        user: state.user
     }
 }
 

@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import Navigation from '../components/Navigation.js';
+import withRouter from "react-router-dom/withRouter";
 
 
 
@@ -24,6 +25,7 @@ class Login extends React.Component {
             if (data.status === 202 && data.ok) {
                 
                 data.json().then(data => this.props.userLoggedIn(data));
+                this.props.history.push("/");
             }
         }).catch(error => { console.log(error) });
     }
@@ -67,4 +69,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Login));
