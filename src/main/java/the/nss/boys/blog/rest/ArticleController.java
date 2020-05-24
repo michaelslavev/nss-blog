@@ -84,6 +84,7 @@ public class ArticleController{
     
     
     //CREATE ARTICLE
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN') or (filterObject.author.username == principal.username)")
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> createArticle(@RequestBody Article article) {
         articleService.persist(article);
