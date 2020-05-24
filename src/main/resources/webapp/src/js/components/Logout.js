@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Redirect} from 'react-router-dom';
 
-import Navbar from '../components/Navbar.js';
+import Navigation from './Navigation.js';
 
 class Logout extends React.Component{
 

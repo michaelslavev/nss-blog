@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import Navbar from '../components/Navbar.js';
+import Navigation from '../components/Navigation.js';
 
 
 
@@ -14,7 +14,6 @@ class Login extends React.Component {
             password: document.querySelector('input#password-input').value
         }
 
-        let response1;
         fetch('/api/users/login', {
             method: 'POST',
             headers: {
@@ -40,7 +39,7 @@ class Login extends React.Component {
     render() {
         return (
             <div className="login-wrapper">
-                <Navbar></Navbar>
+                <Navigation/>
                 <form onSubmit={this.loginRequest} id="login-form">
                     <label htmlFor="username-input">username:</label>
                     <input id="username-input" placeholder="Username"></input>

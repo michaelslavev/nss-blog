@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
 
-import Navbar from '../components/Navbar.js';
+import Navigation from '../components/Navigation.js';
 
 class Homepage extends React.Component{
     render(){
         return(
             <div className="homepage-wrapper">
-                <Navbar/>
+                <Navigation/>
                 
             </div>
         );
