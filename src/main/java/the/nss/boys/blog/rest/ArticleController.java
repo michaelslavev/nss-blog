@@ -5,6 +5,8 @@
  */
 package the.nss.boys.blog.rest;
 
+import java.security.Principal;
+import java.security.Security;
 import java.time.LocalDateTime;
 import java.util.*;
 import org.slf4j.Logger;
@@ -22,6 +24,7 @@ import the.nss.boys.blog.model.Article;
 import the.nss.boys.blog.model.Comment;
 import the.nss.boys.blog.model.Like;
 import the.nss.boys.blog.rest.util.RestUtils;
+import the.nss.boys.blog.security.SecurityUtils;
 import the.nss.boys.blog.service.ArticleService;
 import the.nss.boys.blog.service.CommentService;
 import the.nss.boys.blog.service.LikeService;
@@ -87,6 +90,8 @@ public class ArticleController{
     @PreAuthorize("hasAnyRole('ROLE_ADMIN') or (filterObject.author.username == principal.username)")
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> createArticle(@RequestBody Article article) {
+        article.setDate(LocalDateTime.now());
+        article.setUser(SecurityUtils.getCurrentUser());
         articleService.persist(article);
         if (LOG.isDebugEnabled()) {
             LOG.debug("Article {} persisted successfully.", article);

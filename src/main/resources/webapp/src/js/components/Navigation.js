@@ -8,10 +8,6 @@ import Logo from './blogolo.png';
 
 class Navigation extends React.Component {
 
-    componentDidMount() {
-        console.log(this.props);
-    }
-
     render() {
         return (
             <div className="navbar-wrapper">

@@ -13,28 +13,30 @@ import javax.persistence.*;
 @Table
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Article extends AbstractEntity {
-    
+
     @Basic(optional = false)
     @Column(nullable = false)
     private String title;
-   
+
     @Basic(optional = false)
     @Column(nullable = false)
     private String content;
-    
+
     //@Basic(optional = false)
     @Column
-    private LocalDateTime created;  
-    
+    private LocalDateTime created;
+
     @ManyToMany
     @OrderBy("name")
+    @JsonIgnore
     private List<Topic> topics;
-    
+
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Comment> comments;
-    
+
     @OneToMany(mappedBy = "article")
+    @JsonIgnore
     private List<Like> likes;
     
     @ManyToOne

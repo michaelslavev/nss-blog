@@ -4,14 +4,23 @@ import Navigation from '../components/Navigation.js';
 import { connect } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import Container from 'react-bootstrap/Container';
 
 class AddArticle extends React.Component {
 
     submit = (e) =>{
         e.preventDefault();
+        let title = document.querySelector('input#title-input');
+        let content = document.querySelector('input#content-input');
+
+        if(!(title.value.length > 0 && content.value.length > 0)){
+            alert("Něco chybí");
+            return;
+        }
+
         let body = {
-            title: document.querySelector('input#title-input').value,
-            content: document.querySelector('input#content-input').value
+            title: title.value,
+            content: content.value,
         };
         fetch('/api/articles',{
             method: 'POST',
@@ -22,6 +31,9 @@ class AddArticle extends React.Component {
         }
         ).then(data => {
             console.log(data);
+        }).catch(error => {
+            console.log(error);
+            alert("oops");
         })
     }
 
@@ -29,6 +41,7 @@ class AddArticle extends React.Component {
         return (
             <div className="add-article-wrapper">
                 <Navigation />
+                <Container fluid>
                 <Form onSubmit={this.submit}>
                     <Form.Group controlId="formTitle">
                         <Form.Label>Title</Form.Label>
@@ -43,6 +56,7 @@ class AddArticle extends React.Component {
                         Submit
                     </Button>
                 </Form>
+                </Container>
             </div>
         );
     }

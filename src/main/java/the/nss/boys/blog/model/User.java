@@ -7,6 +7,8 @@ package the.nss.boys.blog.model;
 
 import java.util.List;
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Entity
@@ -39,6 +41,7 @@ public class User extends AbstractEntity {
     
     @OneToMany(cascade = CascadeType.PERSIST, orphanRemoval = true)
   //  @JoinColumn(name = "article_id")
+    @JsonIgnore
     private List<Article> articles;
     
   
