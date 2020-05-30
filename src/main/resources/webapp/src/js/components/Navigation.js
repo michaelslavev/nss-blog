@@ -23,12 +23,14 @@ class Navigation extends React.Component {
                         />{' '}
                     </Navbar.Brand>
                     <Nav className="mr-auto">
-                        {this.props.loggedIn && this.props.user?.role === "ADMIN" ? <NavLink to="/add">Add Article</NavLink> : null}
+                        {this.props.loggedIn && this.props.user?.role === "ADMIN" ? <Nav.Link><NavLink to="/add">Add Article</NavLink></Nav.Link> : null}
+                        {this.props.loggedIn && this.props.user?.role === "ADMIN" ?  <Nav.Link><NavLink to="/addTopic">Add Topic</NavLink></Nav.Link> : null}
                     </Nav>
                     <Nav>
-                        {!this.props.loggedIn ? <NavLink to="/login">Login</NavLink> : null}
-                        {!this.props.loggedIn ? <NavLink to="/register">Register</NavLink> : null}
-                        {this.props.loggedIn ? <NavLink to="/j_spring_security_logout" onClick={this.props.logout}>Logout</NavLink> : null}
+                        {!this.props.loggedIn ?  <Nav.Link><NavLink to="/login">Login</NavLink></Nav.Link> : null}
+                        {!this.props.loggedIn ?  <Nav.Link><NavLink to="/register">Register</NavLink></Nav.Link> : null}
+                        {this.props.loggedIn ? <Nav.Link><NavLink to="/j_spring_security_logout" onClick={this.props.logout}>Logout</NavLink></Nav.Link> : null}
+
                     </Nav>
                 </Navbar>
 

@@ -28,7 +28,6 @@ public class Article extends AbstractEntity {
 
     @ManyToMany
     @OrderBy("name")
-    @JsonIgnore
     private List<Topic> topics;
 
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)

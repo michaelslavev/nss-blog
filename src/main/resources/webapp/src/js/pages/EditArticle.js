@@ -6,38 +6,44 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 
-class AddArticle extends React.Component {
+class EditArticle extends React.Component {
 
     constructor(props){
         super(props);
         this.state={
-            topics:null
+            topics:null,
+            article:null
         }
     }
 
     submit = (e) =>{
         e.preventDefault();
-        let title = document.querySelector('input#title-input');
-        let content = document.querySelector('input#content-input');
-        let topicSelect = document.querySelector('select#topic-input');
+        const title = document.querySelector('input#title-input').value || this.state.article.title;
+        const content = document.querySelector('input#content-input').value || this.state.article.content;
+        const topicSelect = document.querySelector('select#topic-input');
 
         let topicBody = this.state.topics.filter((t) => t.name == topicSelect.options[topicSelect.selectedIndex].value);
         console.log(topicBody);
 
-        if(!(title.value.length > 0 && content.value.length > 0 && topicBody.length > 0)){
+        const id = this.props.match.params.article_id;
+
+        if(!(title.length > 0 && content.length > 0 && topicBody.length > 0)){
             alert("Něco chybí");
             return;
         }
 
-        let body = {
-            title: title.value,
-            content: content.value,
+        let body = this.state.article;
+        body = {
+            ...body,
+            id: id,
+            title: title,
+            content: content,
             topics: topicBody
         };
 
         console.log(body);
-        fetch('/api/articles',{
-            method: 'POST',
+        fetch('/api/articles/'+id,{
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -55,10 +61,19 @@ class AddArticle extends React.Component {
         fetch('/api/topics').then((response) => {
             response.json().then((data) => {
                 this.setState({
+                    ...this.state,
                     topics:data
                 })
             });
         });
+        fetch('/api/articles/'+this.props.match.params.article_id).then((response) => {
+            response.json().then((data) => {
+                this.setState({
+                    ...this.state,
+                    article:data
+                })
+            });
+        }).catch(error => {console.log(error)});
     }
 
     render() {
@@ -69,12 +84,12 @@ class AddArticle extends React.Component {
                 <Form onSubmit={this.submit}>
                     <Form.Group controlId="formTitle">
                         <Form.Label>Title</Form.Label>
-                        <Form.Control type="text" placeholder="Enter title" id="title-input"/>
+                        <Form.Control type="text" placeholder={this.state.article?.title} id="title-input"/>
                     </Form.Group>
 
                     <Form.Group controlId="formContent">
                         <Form.Label>Content</Form.Label>
-                        <Form.Control type="text" placeholder="Enter content" id="content-input"/>
+                        <Form.Control type="text" placeholder={this.state.article?.content} id="content-input"/>
                     </Form.Group>
 
                     <Form.Group controlId="formTopic">
@@ -101,4 +116,4 @@ const mapStateToProps = (state, ownProps) => {
     }
 }
 
-export default connect(mapStateToProps)(AddArticle)
+export default connect(mapStateToProps)(EditArticle)

@@ -7,6 +7,8 @@ import Logout from './js/components/Logout.js';
 import AddArticle from './js/pages/AddArticle.js';
 import Register from './js/pages/Register.js';
 import Article from './js/pages/Article.js';
+import AddTopic from './js/pages/AddTopic.js';
+import EditArticle from './js/pages/EditArticle.js';
 
 
 class App extends Component{
@@ -19,6 +21,8 @@ class App extends Component{
           <Route exact path="/add" component={AddArticle}></Route>
           <Route exact path="/register" component={Register}></Route>
           <Route path="/article/:article_id" component={Article}></Route>
+          <Route exact path="/addTopic" component={AddTopic}></Route>
+          <Route path="/edit/:article_id" component={EditArticle}></Route>
         </Router>
       );
   }

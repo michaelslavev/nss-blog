@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-
+import Container from 'react-bootstrap/Container';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
 import Navigation from '../components/Navigation.js';
 import withRouter from "react-router-dom/withRouter";
 
@@ -42,13 +44,22 @@ class Login extends React.Component {
         return (
             <div className="login-wrapper">
                 <Navigation/>
-                <form onSubmit={this.loginRequest} id="login-form">
-                    <label htmlFor="username-input">username:</label>
-                    <input id="username-input" placeholder="Username"></input>
-                    <label htmlFor="password-input">password:</label>
-                    <input id="password-input" type="password" placeholder="password"></input>
-                    <button type="submit">submit</button>
-                </form>
+                <Container>
+                <Form onSubmit={this.loginRequest}>
+                    <Form.Group controlId="formUsername">
+                        <Form.Label>Username</Form.Label>
+                        <Form.Control type="text" placeholder="Enter your username" id="username-input"/>
+                    </Form.Group>
+                    <Form.Group controlId="formPassword">
+                        <Form.Label>Password</Form.Label>
+                        <Form.Control type="text" placeholder="Enter your password" id="password-input"/>
+                    </Form.Group>
+
+                    <Button variant="primary" type="submit">
+                        Submit
+                    </Button>
+                </Form>
+                </Container>
             </div>
         );
     }
