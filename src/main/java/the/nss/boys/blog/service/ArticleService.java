@@ -5,7 +5,7 @@
  */
 package the.nss.boys.blog.service;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +46,7 @@ public class ArticleService {
     }
     
     @Transactional(readOnly = true)
-    public List<Article> findByDate(LocalDateTime date) {
+    public List<Article> findByDate(LocalDate date) {
         return dao.findByDate(date);
     }
     

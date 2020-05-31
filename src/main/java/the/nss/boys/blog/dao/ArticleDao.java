@@ -9,7 +9,7 @@ import the.nss.boys.blog.model.Article;
 import the.nss.boys.blog.model.Topic;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
@@ -33,7 +33,7 @@ public class ArticleDao extends BaseDao<Article>{
         return em.createQuery("SELECT a FROM Article a WHERE :topic MEMBER OF a.topics AND NOT a.removed", Article.class).getResultList();
     }
     
-    public List<Article> findByDate(LocalDateTime date) {
+    public List<Article> findByDate(LocalDate date) {
         Objects.requireNonNull(date);
         return em.createQuery("SELECT a FROM Article a WHERE a.created = ?1", Article.class).setParameter(1, date)
                  .getResultList();

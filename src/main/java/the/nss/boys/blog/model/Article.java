@@ -5,7 +5,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import java.time.LocalDateTime;
+
+import java.time.LocalDate;
 import java.util.*;
 import javax.persistence.*;
 
@@ -25,8 +26,8 @@ public class Article extends AbstractEntity {
 
     //@Basic(optional = false)
     @Column(name="created")
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime created;
+    @JsonFormat(pattern="dd-MM-yyyy",timezone="Europe/Prague")
+    private LocalDate created;
 
     @ManyToMany
     @OrderBy("name")
@@ -48,7 +49,7 @@ public class Article extends AbstractEntity {
     public Article() {
     }
 
-    public Article(String title, String content, LocalDateTime created, User author) {
+    public Article(String title, String content, LocalDate created, User author) {
         this.title = title;
         this.content = content;
         this.created = created;
@@ -71,11 +72,11 @@ public class Article extends AbstractEntity {
         this.content = content;
     }
 
-    public LocalDateTime getDate() {
+    public LocalDate getDate() {
         return created;
     }
 
-    public void setDate(LocalDateTime date) {
+    public void setDate(LocalDate date) {
         this.created = date;
     }
 

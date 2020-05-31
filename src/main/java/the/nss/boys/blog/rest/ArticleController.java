@@ -5,9 +5,9 @@
  */
 package the.nss.boys.blog.rest;
 
-import java.security.Principal;
-import java.security.Security;
-import java.time.LocalDateTime;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,7 +77,7 @@ public class ArticleController{
     
     //FIND ARTICLE BY DATE
     @RequestMapping(value = "/date={date}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<Article> findByDate(@PathVariable("date") LocalDateTime created) {
+    public List<Article> findByDate(@PathVariable("date") LocalDate created) {
         final List<Article> result = articleService.findByDate(created);
         if (result == null) {
             System.out.println("No article with this date.");
@@ -90,7 +90,8 @@ public class ArticleController{
     @PreAuthorize("hasAnyRole('ROLE_ADMIN') or (filterObject.author.username == principal.username)")
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> createArticle(@RequestBody Article article) {
-        article.setDate(LocalDateTime.now());
+        System.out.println(LocalDate.now());
+        article.setDate(LocalDate.now());
         article.setUser(SecurityUtils.getCurrentUser());
         articleService.persist(article);
         if (LOG.isDebugEnabled()) {
