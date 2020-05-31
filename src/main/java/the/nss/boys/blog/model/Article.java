@@ -1,6 +1,7 @@
 
 package the.nss.boys.blog.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -15,15 +16,16 @@ import javax.persistence.*;
 public class Article extends AbstractEntity {
 
     @Basic(optional = false)
-    @Column(nullable = false)
+    @Column(nullable = false,name="title")
     private String title;
 
     @Basic(optional = false)
-    @Column(nullable = false)
+    @Column(nullable = false,name="content")
     private String content;
 
     //@Basic(optional = false)
-    @Column
+    @Column(name="created")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime created;
 
     @ManyToMany
