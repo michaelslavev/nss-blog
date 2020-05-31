@@ -14,6 +14,7 @@ public class HazelcastConfiguration {
     public Config hazelCastConfig(){
         return new Config()
                 .setInstanceName("hazelcast-instance")
+                .setProperty("hazelcast.rest.enabled", "true")
                 .addMapConfig(
                         new MapConfig()
                                 .setName("articles")
