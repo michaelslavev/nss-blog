@@ -90,7 +90,7 @@ public class ArticleController{
     @PreAuthorize("hasAnyRole('ROLE_ADMIN') or (filterObject.author.username == principal.username)")
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> createArticle(@RequestBody Article article) {
-        article.setDate(Dat);
+        article.setDate(LocalDateTime.now());
         article.setUser(SecurityUtils.getCurrentUser());
         articleService.persist(article);
         if (LOG.isDebugEnabled()) {
