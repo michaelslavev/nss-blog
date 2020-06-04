@@ -10,7 +10,10 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 
-
+/**
+ * Serializable abstract entity. Every model class inherits from her.
+ * Contains id variable
+ */
 @MappedSuperclass
 public abstract class AbstractEntity implements Serializable {
 

@@ -18,12 +18,21 @@ public class TopicDao extends BaseDao<Topic>{
     public TopicDao(){
         super(Topic.class);
     }
-    
+
+    /**
+     * Query for finding all Topics
+     * @return List of found Topics
+     */
     @Override
     public List<Topic> findAll() {
         return em.createQuery("SELECT t FROM Topic t", Topic.class).getResultList();
     }
-    
+
+    /**
+     * Query for finding all topics by name
+     * @param name
+     * @return List of found Topics
+     */
      public List<Topic> findByName(String name){
         Objects.requireNonNull(name);
         return em.createQuery("SELECT t FROM Topic t WHERE t.name LIKE ?1", Topic.class).setParameter(1, name)

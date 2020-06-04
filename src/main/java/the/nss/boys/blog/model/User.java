@@ -11,6 +11,11 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+/**
+ * Model entity of User
+ *
+ * Contains firstName, lastName, username, password, role, articles variables
+ */
 @Entity
 @Table(name="BlogUser")
 //@Inheritance(strategy=InheritanceType.TABLE_PER_CLASS)
@@ -82,6 +87,10 @@ public class User extends AbstractEntity {
         this.password = password;
     }
 
+    /**
+     * Encode password
+     * @param encoder
+     */
     public void encodePassword(PasswordEncoder encoder) {
         this.password = encoder.encode(password);
     }

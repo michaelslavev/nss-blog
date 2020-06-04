@@ -29,7 +29,11 @@ import the.nss.boys.blog.service.ArticleService;
 import the.nss.boys.blog.service.CommentService;
 import the.nss.boys.blog.service.LikeService;
 
-
+/**
+ * Rest controller for Article
+ *
+ * Creates, Reads, Edits and Deletes data via Http requests
+ */
 @RestController
 @RequestMapping("/api/articles")
 public class ArticleController{
@@ -45,17 +49,24 @@ public class ArticleController{
         this.commentService = commentService;
         this.likeService = likeService;
     }
-    
-    //GET ALL ARTICLES
+
+    /**
+     * Get all articles
+     * @return List of articles
+     */
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Article> getAllArticles(){
        final List<Article> articles;
        articles = articleService.findAll();
        return articles;
     }
-    
-    
-    //FIND ARTICLE BY ID
+
+
+    /**
+     * Get article by ID
+     * @param id from HttpRequest_GET
+     * @return article
+     */
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public Article find(@PathVariable("id") Integer id) {
         final Article result = articleService.find(id);
@@ -64,7 +75,12 @@ public class ArticleController{
         }
         return result;
     }
-    
+
+    /**
+     * Get articles by title
+     * @param title from HttpRequest_GET
+     * @return List of articles
+     */
     //FIND ARTICLES BY TITLE
     @RequestMapping(value = "/title={title}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Article> findByTitle(@PathVariable("title") String title) {
@@ -76,6 +92,12 @@ public class ArticleController{
     }
     
     //FIND ARTICLE BY DATE
+
+    /**
+     * Get articles created on specific time
+     * @param created from HttpRequest_GET
+     * @return List of articles
+     */
     @RequestMapping(value = "/date={date}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Article> findByDate(@PathVariable("date") LocalDate created) {
         final List<Article> result = articleService.findByDate(created);
@@ -84,8 +106,12 @@ public class ArticleController{
         }
         return result;
     }
-    
-    
+
+    /**
+     * Creates new article if user has the authority
+     * @param article from HttpRequest_POST
+     * @return HttpStatus status code
+     */
     //CREATE ARTICLE
     @PreAuthorize("hasAnyRole('ROLE_ADMIN') or (filterObject.author.username == principal.username)")
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -100,7 +126,12 @@ public class ArticleController{
         final HttpHeaders headers = RestUtils.createLocationHeaderFromCurrentUri("/{id}", article.getId());
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
-    
+
+    /**
+     * Updates article if user has the authority
+     * @param id from path url
+     * @param article from HttpRequest_PUT
+     */
     //UPDATE ARTICLE
     @PreAuthorize("hasRole('ROLE_ADMIN') or (filterObject.author.username == principal.username) ")
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -113,7 +144,11 @@ public class ArticleController{
         articleService.update(article);
         LOG.debug("Updated article {}.", article);
     }
-    
+
+    /**
+     * Removes article if user has the authority
+     * @param id from path url
+     */
     //REMOVE ARTICLE    
     @PreAuthorize("hasRole('ROLE_ADMIN') or (filterObject.author.username == principal.username) ")
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
@@ -126,10 +161,13 @@ public class ArticleController{
         articleService.remove(toRemove);
         LOG.debug("Removed article {}.", toRemove);
     }
-    
-   
-    
-    //ADD COMMENT TO ARTICLE
+
+
+    /**
+     * Add new comment to article if user is logged in
+     * @param id from path url
+     * @param comment from HttpRequest_POST
+     */
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     @RequestMapping(value = "/{id}/comments", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public void addCommentToArticle(@PathVariable("id") Integer id, @RequestBody Comment comment) {
@@ -137,8 +175,13 @@ public class ArticleController{
         articleService.addComment(article, comment);
         LOG.debug("Comment {} added into article {}.", article, comment);
     }
-    
-    
+
+
+    /**
+     * Removes comment from article if user has the authority
+     * @param commentId from path url
+     * @param articleId from path url
+     */
     //REMOVE COMMENT FROM ARTICLE
     @PreAuthorize("hasAnyRole('ROLE_ADMIN') or (filterObject.author.username == principal.username)")
     @RequestMapping(value = "/{articleId}/comments/{commentId}", method = RequestMethod.DELETE)
@@ -153,16 +196,24 @@ public class ArticleController{
         articleService.removeComment(article, toRemove);
         LOG.debug("Comment {} removed from article {}.", toRemove, article);
     }
-    
-    
+
+    /**
+     * Get all comments of article
+     * @param id of Article from path url
+     * @return List of Comments
+     */
     //VIEW ARTICLES COMMENTS
     @RequestMapping(value = "/{id}/comments", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
      public List<Comment> getCommentsOfArticle(@PathVariable("id") Integer id) {
         return commentService.findByArticle(articleService.find(id));
     }
-    
-    
-     
+
+
+    /**
+     * Get all likes of article
+     * @param id of Article from path url
+     * @return List of Likes
+     */
     //VIEW ARTICLES LIKES
     @RequestMapping(value = "/{id}/likes", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<String> getArticleLikes(@PathVariable("id") Integer id){
@@ -173,8 +224,12 @@ public class ArticleController{
         });
        return usernames;
     }
-     
-    
+
+    /**
+     * Add like to article if user is logged in
+     * @param id of Article from path url
+     * @param like
+     */
     //ADD LIKES TO ARTICLE
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     @RequestMapping(value = "/{id}/likes", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)

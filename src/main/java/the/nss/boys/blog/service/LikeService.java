@@ -15,6 +15,11 @@ import java.util.Objects;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * Service for Likes
+ *
+ * Adds, Removes, Find and Update likes then persist to database via LikeDao
+ */
 @Service
 @CacheConfig(cacheNames = "likes")
 public class LikeService {

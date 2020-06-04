@@ -14,6 +14,9 @@ import org.springframework.stereotype.Service;
 import the.nss.boys.blog.security.model.AuthenticationToken;
 import the.nss.boys.blog.security.model.UserDetails;
 
+/**
+ *  Service for authentication
+ */
 @Service
 public class DefaultAuthenticationProvider implements AuthenticationProvider {
 

@@ -16,6 +16,9 @@ import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Persistance config for JPA
+ */
 @Configuration
 @PropertySource("classpath:eclipselink.properties")
 @EnableTransactionManagement

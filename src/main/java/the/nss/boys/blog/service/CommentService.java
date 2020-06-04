@@ -15,6 +15,11 @@ import java.util.Objects;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * Service for Comments
+ *
+ * Adds, Removes, Find and Update comments then persist to database via CommentDao
+ */
 @Service
 @CacheConfig(cacheNames = "comments")
 public class CommentService {

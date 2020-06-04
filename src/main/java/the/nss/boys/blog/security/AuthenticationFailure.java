@@ -13,7 +13,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-
+/**
+ * Service for AuthenticationFailure
+ */
 @Service
 public class AuthenticationFailure implements AuthenticationFailureHandler {
 
@@ -26,6 +28,13 @@ public class AuthenticationFailure implements AuthenticationFailureHandler {
         this.mapper = mapper;
     }
 
+    /**
+     * Gets response of Servlet about authentication if it indicates failure sends a error message.
+     * @param httpServletRequest
+     * @param httpServletResponse
+     * @param e
+     * @throws IOException
+     */
     @Override
     public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
                                         AuthenticationException e) throws IOException {

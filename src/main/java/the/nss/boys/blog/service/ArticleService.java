@@ -19,6 +19,11 @@ import the.nss.boys.blog.model.Comment;
 import the.nss.boys.blog.model.Like;
 import the.nss.boys.blog.model.Topic;
 
+/**
+ * Service for Articles
+ *
+ * Adds, Removes, Find and Update articles then persist to database via ArticleDao
+ */
 @Service
 @CacheConfig(cacheNames = "articles")
 public class ArticleService {
@@ -96,7 +101,8 @@ public class ArticleService {
         article.addLike(like);
         dao.update(article);
     }
-    
+
+
     @Transactional
     public void removeLike(Article article, Like like) {
         Objects.requireNonNull(article);

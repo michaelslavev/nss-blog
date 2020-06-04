@@ -19,6 +19,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import the.nss.boys.blog.interceptor.UserLoggerInterceptor;
 import the.nss.boys.blog.model.User;
 import the.nss.boys.blog.rest.util.RestUtils;
 import the.nss.boys.blog.security.DefaultAuthenticationProvider;
@@ -26,8 +27,17 @@ import the.nss.boys.blog.security.model.AuthenticationToken;
 import the.nss.boys.blog.security.model.UserDetails;
 import the.nss.boys.blog.service.UserService;
 
+import javax.interceptor.Interceptor;
+import javax.interceptor.Interceptors;
+
+/**
+ * Rest controller for User
+ *
+ * Creates, Reads, Edits and Deletes data via Http requests
+ */
 @RestController
 @RequestMapping("/api/users")
+@Interceptors(UserLoggerInterceptor.class)
 public class UserController{
 
     private static final Logger LOG = LoggerFactory.getLogger(UserController.class);
@@ -41,7 +51,11 @@ public class UserController{
         this.provider = provider;
     }
 
-    
+    /**
+     * Register new user
+     * @param user from HttpRequest_POST
+     * @return
+     */
     @RequestMapping(value="/register",method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> register(@RequestBody User user) {
         userService.persist(user);
@@ -50,6 +64,11 @@ public class UserController{
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
+    /**
+     * Gets current user if anyone is logged
+     * @param principal
+     * @return
+     */
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     @RequestMapping(value = "/current", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public User getCurrent(Principal principal) {
@@ -57,6 +76,11 @@ public class UserController{
         return auth.getPrincipal().getUser();
     }
 
+    /**
+     * Login user if undergoes authentication
+     * @param user
+     * @return
+     */
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> login(@RequestBody User user) {
         final Authentication t = new UsernamePasswordAuthenticationToken(user.getUsername(),user.getPassword());

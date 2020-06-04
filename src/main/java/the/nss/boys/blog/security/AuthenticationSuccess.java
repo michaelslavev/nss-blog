@@ -27,6 +27,13 @@ public class AuthenticationSuccess implements AuthenticationSuccessHandler, Logo
         this.mapper = mapper;
     }
 
+    /**
+     * Gets response of Servlet about authentication if it indicates success login user
+     * @param httpServletRequest
+     * @param httpServletResponse
+     * @param authentication
+     * @throws IOException
+     */
     @Override
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
                                         Authentication authentication) throws IOException {
@@ -45,6 +52,13 @@ public class AuthenticationSuccess implements AuthenticationSuccessHandler, Logo
         return ((UserDetails) authentication.getPrincipal()).getUsername();
     }
 
+    /**
+     * Gets response of Servlet about authentication login out request and log out user
+     * @param httpServletRequest
+     * @param httpServletResponse
+     * @param authentication
+     * @throws IOException
+     */
     @Override
     public void onLogoutSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
                                 Authentication authentication) throws IOException {

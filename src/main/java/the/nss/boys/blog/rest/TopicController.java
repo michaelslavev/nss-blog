@@ -22,7 +22,11 @@ import the.nss.boys.blog.rest.util.RestUtils;
 import the.nss.boys.blog.service.ArticleService;
 import the.nss.boys.blog.service.TopicService;
 
-
+/**
+ * Rest controller for Topics
+ *
+ * Creates, Reads, Edits and Deletes data via Http requests
+ */
 @RestController
 @RequestMapping("/api/topics")
 public class TopicController{
@@ -38,12 +42,17 @@ public class TopicController{
         this.topicService = service;
         this.articleService = articleService;
     }
-    
+
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Topic> getTopics() {
         return topicService.findAll();
     }
-    
+
+    /**
+     * Adds new topic if user has the authority
+     * @param topic from HttpRequest_POST
+     * @return
+     */
     //ADD TOPIC only admin
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -53,7 +62,12 @@ public class TopicController{
         final HttpHeaders headers = RestUtils.createLocationHeaderFromCurrentUri("/{id}", topic.getId());
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
-    
+
+    /**
+     * Get topic by id
+     * @param id of topic from path url
+     * @return Topic object
+     */
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public Topic getById(@PathVariable("id") Integer id) {
         final Topic category = topicService.find(id);
@@ -62,14 +76,23 @@ public class TopicController{
         }
         return category;
     }
-    
+
+    /**
+     * Gets all articles of topic ID
+     * @param id of topic from path url
+     * @return List of Articles
+     */
     //FIND ARTICLE BY TOPIC
     @RequestMapping(value = "/{id}/articles", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Article> getArticleByTopic(@PathVariable("id") Integer id) {
         return articleService.findByTopic(topicService.find(id));
     }
-    
-    
+
+    /**
+     * Adds topic to article if user is logged in
+     * @param id of topic from path url
+     * @param article
+     */
     //ADD ARTICLE A TOPIC
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     @RequestMapping(value = "/{id}/articles", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -79,7 +102,12 @@ public class TopicController{
         topicService.addTopic(topic, article);
         LOG.debug("Article {} added into topic {}.", article, topic);
     }
-    
+
+    /**
+     * Removes topic from article if user is logged in
+     * @param topicId from path url
+     * @param articleId from path url
+     */
     //REMOVE ARTICLE FROM TOPIC
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     @RequestMapping(value = "/{topicId}/articles/{articleId}", method = RequestMethod.DELETE)

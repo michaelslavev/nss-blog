@@ -10,7 +10,11 @@ import java.time.LocalDate;
 import java.util.*;
 import javax.persistence.*;
 
-
+/**
+ * Model entity of Article
+ *
+ * Contains title, content, created, topics, comments, likes, author and removed variables
+ */
 @Entity
 @Table
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
@@ -49,6 +53,13 @@ public class Article extends AbstractEntity {
     public Article() {
     }
 
+    /**
+     * Constructor of object article
+     * @param title
+     * @param content
+     * @param created
+     * @param author
+     */
     public Article(String title, String content, LocalDate created, User author) {
         this.title = title;
         this.content = content;
@@ -88,15 +99,23 @@ public class Article extends AbstractEntity {
     public void setTopics(List<Topic> topics) {
         this.topics = topics;
     }
-    
+
+    /**
+     * Add topic to article
+     * @param topic
+     */
     public void addTopic(Topic topic) {
         Objects.requireNonNull(topic);
         if (topics == null) {
             this.topics = new ArrayList<>();
         }
         topics.add(topic);
-    } 
-    
+    }
+
+    /**
+     * Removes topic from article
+     * @param topic
+     */
     public void removeTopic(Topic topic) {
         Objects.requireNonNull(topic);
         if (topics == null) {
@@ -123,7 +142,11 @@ public class Article extends AbstractEntity {
     public void setComments(List<Comment> comments) {
         this.comments = comments;
     }
-     
+
+    /**
+     * Adds comment to article
+     * @param comment
+     */
     public void addComment(Comment comment) {
         Objects.requireNonNull(comment);
         if (comments == null) {
@@ -132,8 +155,11 @@ public class Article extends AbstractEntity {
         comments.add(comment);
         comment.setArticle(this);
     }
-    
-    
+
+    /**
+     * Removes comment from article
+     * @param comment
+     */
     public void removeComment(Comment comment) {
         Objects.requireNonNull(comment);
         if (comments == null) {
@@ -158,7 +184,11 @@ public class Article extends AbstractEntity {
     public void setLikes(List<Like> likes) {
         this.likes = likes;
     }
-    
+
+    /**
+     * Adds one like to article
+     * @param like
+     */
      public void addLike(Like like) {
           Objects.requireNonNull(like);
         if (likes == null) {
@@ -166,6 +196,11 @@ public class Article extends AbstractEntity {
         }
         likes.add(like);
     }
+
+    /**
+     * Removes one like from article
+     * @param like
+     */
     public void removeLike(Like like) {
         Objects.requireNonNull(like);
         if (likes == null) {

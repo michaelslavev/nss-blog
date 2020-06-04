@@ -17,6 +17,11 @@ import the.nss.boys.blog.dao.TopicDao;
 import the.nss.boys.blog.model.Article;
 import the.nss.boys.blog.model.Topic;
 
+/**
+ * Service for Topics
+ *
+ * Adds, Removes, Find and Update topics then persist to database via TopicDao
+ */
 @Service
 @CacheConfig(cacheNames = "topics")
 public class TopicService {
@@ -46,7 +51,7 @@ public class TopicService {
         Objects.requireNonNull(topic);
         dao.persist(topic);
     }
-    
+
     /**
      * Adds the specified topic to the article.
      *
@@ -62,7 +67,13 @@ public class TopicService {
         articleDao.update(article);
     }
 
-    
+
+    /**
+     * Removes the specified topic from the article.
+     *
+     * @param topic Target topic
+     * @param article  Article to add
+     */
     @Transactional
     public void removeTopic(Topic topic, Article article) {
         Objects.requireNonNull(topic);

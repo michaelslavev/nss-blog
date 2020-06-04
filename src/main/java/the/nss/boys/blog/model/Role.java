@@ -5,7 +5,11 @@
  */
 package the.nss.boys.blog.model;
 
-
+/**
+ * Model enum of Role
+ *
+ * Two types: ROLE_ADMIN, ROLE_USER
+ */
 public enum Role {
     ADMIN("ROLE_ADMIN"), USER("ROLE_USER");
 

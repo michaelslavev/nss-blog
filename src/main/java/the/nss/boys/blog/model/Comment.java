@@ -9,7 +9,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDateTime;
 import javax.persistence.*;
 
-
+/**
+ * Model entity of Comment
+ *
+ * Contains user, article, content, created variables
+ */
 @Entity
 @Table
 public class Comment extends AbstractEntity {
@@ -33,7 +37,12 @@ public class Comment extends AbstractEntity {
     
     public Comment(){
     }
-    
+
+    /**
+     * Constructor of object comment
+     * @param content
+     * @param user
+     */
     public Comment(String content, User user) {
         this.content = content;
         this.user = user;

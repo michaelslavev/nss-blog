@@ -4,6 +4,9 @@ import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
+/**
+ * Creates and destroy HttpSessions
+ */
 @WebListener
 public class SessionTimeoutManager implements HttpSessionListener {
 

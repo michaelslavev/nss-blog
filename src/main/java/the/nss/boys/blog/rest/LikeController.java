@@ -16,7 +16,11 @@ import org.springframework.web.bind.annotation.*;
 import the.nss.boys.blog.model.Like;
 import the.nss.boys.blog.service.LikeService;
 
-
+/**
+ * Rest controller for Like
+ *
+ * Creates, Reads, Edits and Deletes data via Http requests
+ */
 @RestController
 @RequestMapping("/api/likes")
 public class LikeController{
@@ -34,6 +38,11 @@ public class LikeController{
         return likeService.findAll();
     }
 
+    /**
+     *  Updates like on article if user has the authority
+     * @param Id of Like from path url
+     * @param like
+     */
     //UPDATE LIKE
     @PreAuthorize("hasRole('ROLE_ADMIN') or (filterObject.user.username == principal.username) ")
     @RequestMapping(value="/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -50,7 +59,12 @@ public class LikeController{
             LOG.debug("Like {} updated.", like);
         }
     }
-    
+
+    /**
+     * Removes like if user has the authority
+     * @param Id of like from path url
+     * @param like
+     */
     //REMOVE LIKE
     @PreAuthorize("hasRole('ROLE_ADMIN') or (filterObject.user.username == principal.username) ")
     @RequestMapping(value = "/{id}",method = RequestMethod.DELETE)

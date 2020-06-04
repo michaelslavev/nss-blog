@@ -6,6 +6,10 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.view.RedirectView;
 
+/**
+ * Rest controller for error redirection
+ *
+ */
 @Controller
 public class CustomErrorController implements ErrorController {
 

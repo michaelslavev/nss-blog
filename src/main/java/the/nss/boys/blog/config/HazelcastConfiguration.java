@@ -7,6 +7,10 @@ import com.hazelcast.config.MaxSizeConfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Hazelcast configuration via java
+ * Configuring hazelcast mapping and instancing
+ */
 @Configuration
 public class HazelcastConfiguration {
 

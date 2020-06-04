@@ -1,5 +1,8 @@
 package the.nss.boys.blog.security;
 
+/**
+ * Class with all constants for Security (SESSION_TIMEOUT, USERNAME_PARAM, PASSWORD_PARAM, SECURITY_CHECK_URI, etc.)
+ */
 public class SecurityConstants {
 
     private SecurityConstants() {

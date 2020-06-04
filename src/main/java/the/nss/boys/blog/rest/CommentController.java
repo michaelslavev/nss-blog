@@ -15,7 +15,11 @@ import org.springframework.web.bind.annotation.*;
 import the.nss.boys.blog.model.Comment;
 import the.nss.boys.blog.service.CommentService;
 
-
+/**
+ * Rest controller for Comment
+ *
+ * Creates, Reads, Edits and Deletes data via Http requests
+ */
 @RestController
 @RequestMapping("/api/comments")
 public class CommentController{
@@ -29,6 +33,11 @@ public class CommentController{
         this.commentService = commentService;
     }
 
+    /**
+     * Update comment if user has the authority
+     * @param Id of comment from path url
+     * @param comment from HttpRequest_PUT
+     */
     //UPDATE COMMENT
     @PreAuthorize("hasRole('ROLE_ADMIN') or (filterObject.user.username == principal.username) ")
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -45,7 +54,12 @@ public class CommentController{
             LOG.debug("Comment {} updated.", comment);
         }
     }
-    
+
+    /**
+     * Deletes comment if user has the authority
+     * @param Id of comment from path url
+     * @param comment
+     */
     //REMOVE COMMENT
     @PreAuthorize("hasRole('ROLE_ADMIN') or (filterObject.user.username == principal.username) ")
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)

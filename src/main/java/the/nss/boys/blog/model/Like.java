@@ -8,7 +8,11 @@ package the.nss.boys.blog.model;
 
 import javax.persistence.*;
 
-
+/**
+ * Model entity of Like
+ *
+ * Contains user and article variables
+ */
 @Entity
 @Table(name="Likes")
 public class Like extends AbstractEntity {

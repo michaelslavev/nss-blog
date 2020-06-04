@@ -18,6 +18,11 @@ public class UserDao extends BaseDao<User> {
         super(User.class);
     }
 
+    /**
+     * Query for finding user by his username
+     * @param username
+     * @return user
+     */
     public User findByUsername(String username) {
         try {
             return em.createQuery("SELECT u FROM User u WHERE u.username LIKE ?1", User.class).setParameter(1, username)

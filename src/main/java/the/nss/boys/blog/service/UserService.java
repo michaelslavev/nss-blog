@@ -14,6 +14,11 @@ import the.nss.boys.blog.dao.UserDao;
 import the.nss.boys.blog.model.Role;
 import the.nss.boys.blog.model.User;
 
+/**
+ * Service for Users
+ *
+ * Adds, Removes, Find and Update users then persist to database via UserDao
+ */
 @Service
 public class UserService {
 
@@ -27,6 +32,10 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    /**
+     * Creates new person and encode his password
+     * @param user
+     */
     @Transactional
     public void persist(User user) {
         Objects.requireNonNull(user);

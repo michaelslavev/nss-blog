@@ -7,7 +7,11 @@ package the.nss.boys.blog.model;
 
 import javax.persistence.*;
 
-
+/**
+ * Model entity of Topic
+ *
+ * Contains name variable
+ */
 @Entity
 @Table(name="Topic")
 public class Topic extends AbstractEntity {

@@ -20,11 +20,19 @@ public class LikeDao extends BaseDao<Like> {
         super(Like.class);
     }
 
+    /**
+     * Query for finding all Likes
+     * @return List of found Likes
+     */
     public List<Like> findAll() {
         return em.createQuery("SELECT l FROM Like l", Like.class).getResultList();
     }
-    
-     public List<Like> findByArticle(Article article) {
+
+    /**
+     * Query for finding all likes on Article
+     * @return List of found Likes
+     */
+    public List<Like> findByArticle(Article article) {
         Objects.requireNonNull(article);
         return em.createQuery("SELECT l FROM Like l inner join l.article la WHERE la=?1", Like.class).setParameter(1, article)
                  .getResultList();
