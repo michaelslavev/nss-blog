@@ -27,7 +27,6 @@ import the.nss.boys.blog.security.model.AuthenticationToken;
 import the.nss.boys.blog.security.model.UserDetails;
 import the.nss.boys.blog.service.UserService;
 
-import javax.interceptor.Interceptor;
 import javax.interceptor.Interceptors;
 
 /**
