@@ -11,10 +11,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import the.nss.boys.blog.exception.NotFoundException;
+import the.nss.boys.blog.interceptor.TopicLoggerInterceptor;
 import the.nss.boys.blog.model.Article;
 import the.nss.boys.blog.model.Topic;
 import the.nss.boys.blog.rest.util.RestUtils;
 import the.nss.boys.blog.service.ArticleServicesFacade;
+
+import javax.interceptor.Interceptors;
 
 /**
  * Rest controller for Topics
@@ -23,6 +26,7 @@ import the.nss.boys.blog.service.ArticleServicesFacade;
  */
 @RestController
 @RequestMapping("/api/topics")
+@Interceptors(TopicLoggerInterceptor.class)
 public class TopicController{
     
     private static final Logger LOG = LoggerFactory.getLogger(TopicController.class);

@@ -10,7 +10,7 @@ import javax.interceptor.InvocationContext;
 /**
  * Interceptor for UserController
  */
-public class UserLoggerInterceptor {
+public class ArticleLoggerInterceptor {
 
     private static final Logger LOG = LoggerFactory.getLogger(ArticleLoggerInterceptor.class);
 

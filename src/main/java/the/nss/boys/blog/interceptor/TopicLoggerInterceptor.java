@@ -10,9 +10,9 @@ import javax.interceptor.InvocationContext;
 /**
  * Interceptor for UserController
  */
-public class UserLoggerInterceptor {
+public class TopicLoggerInterceptor {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ArticleLoggerInterceptor.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TopicLoggerInterceptor.class);
 
     /**
      * Logs Before "method name" call and after "method name" call
