@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package the.nss.boys.blog.rest;
 
 import java.util.List;
@@ -14,7 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import the.nss.boys.blog.model.Like;
-import the.nss.boys.blog.service.LikeService;
+import the.nss.boys.blog.service.ArticleServicesFacade;
 
 /**
  * Rest controller for Like
@@ -26,16 +21,16 @@ import the.nss.boys.blog.service.LikeService;
 public class LikeController{
     private static final Logger LOG = LoggerFactory.getLogger(ArticleController.class);
 
-    private final LikeService likeService;
+    private final ArticleServicesFacade articleServicesFacade;
     
     @Autowired
-    public LikeController(LikeService likeService){
-        this.likeService = likeService;
+    public LikeController(ArticleServicesFacade articleServicesFacade){
+        this.articleServicesFacade = articleServicesFacade;
     }
     
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Like> getLikes() {
-        return likeService.findAll();
+        return articleServicesFacade.findAllLikes();
     }
 
     /**
@@ -49,12 +44,14 @@ public class LikeController{
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@PathVariable("id") Integer Id, @RequestBody Like like) {
         if (!Id.equals(like.getId())) {
-            System.out.println("IDs are different.");
+            LOG.debug("IDs are different.");
+            return;
         }
-        if (likeService.find(Id) == null) {
-            System.out.println("Like not found.");
+        if (articleServicesFacade.findLikeByID(Id) == null) {
+            LOG.debug("Like not found.");
+            return;
         }
-        likeService.update(like);
+        articleServicesFacade.updateLike(like);
         if (LOG.isDebugEnabled()) {
             LOG.debug("Like {} updated.", like);
         }
@@ -71,12 +68,12 @@ public class LikeController{
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remove(@PathVariable("id") Integer Id, @RequestBody Like like) {
         if (!Id.equals(like.getId())) {
-            System.out.println("IDs are different.");
+            LOG.debug("IDs are different.");
         }
-        if (likeService.find(Id) == null) {
-            System.out.println("Like not found.");
+        if (articleServicesFacade.findLikeByID(Id) == null) {
+            LOG.debug("Like not found.");
         }
-        likeService.remove(like);
+        articleServicesFacade.removeLike(like);
         if (LOG.isDebugEnabled()) {
             LOG.debug("Like {} removed.", like);
         }

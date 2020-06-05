@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package the.nss.boys.blog.rest;
 
 import java.util.List;
@@ -19,8 +14,7 @@ import the.nss.boys.blog.exception.NotFoundException;
 import the.nss.boys.blog.model.Article;
 import the.nss.boys.blog.model.Topic;
 import the.nss.boys.blog.rest.util.RestUtils;
-import the.nss.boys.blog.service.ArticleService;
-import the.nss.boys.blog.service.TopicService;
+import the.nss.boys.blog.service.ArticleServicesFacade;
 
 /**
  * Rest controller for Topics
@@ -33,19 +27,16 @@ public class TopicController{
     
     private static final Logger LOG = LoggerFactory.getLogger(TopicController.class);
 
-    private final TopicService topicService;
-
-    private final ArticleService articleService;
+    private final ArticleServicesFacade articleServicesFacade;
     
     @Autowired
-    public TopicController(TopicService service, ArticleService articleService) {
-        this.topicService = service;
-        this.articleService = articleService;
+    public TopicController(ArticleServicesFacade articleServicesFacade) {
+        this.articleServicesFacade = articleServicesFacade;
     }
 
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Topic> getTopics() {
-        return topicService.findAll();
+        return articleServicesFacade.findAllTopics();
     }
 
     /**
@@ -57,7 +48,7 @@ public class TopicController{
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> createTopic(@RequestBody Topic topic) {
-        topicService.persist(topic);
+        articleServicesFacade.persistTopic(topic);
         LOG.debug("Created topic {}.", topic);
         final HttpHeaders headers = RestUtils.createLocationHeaderFromCurrentUri("/{id}", topic.getId());
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
@@ -70,7 +61,7 @@ public class TopicController{
      */
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public Topic getById(@PathVariable("id") Integer id) {
-        final Topic category = topicService.find(id);
+        final Topic category = articleServicesFacade.findTopicByID(id);
         if (category == null) {
             throw NotFoundException.create("Topic", id);
         }
@@ -85,7 +76,7 @@ public class TopicController{
     //FIND ARTICLE BY TOPIC
     @RequestMapping(value = "/{id}/articles", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Article> getArticleByTopic(@PathVariable("id") Integer id) {
-        return articleService.findByTopic(topicService.find(id));
+        return articleServicesFacade.findArticleByTopic(articleServicesFacade.findTopicByID(id));
     }
 
     /**
@@ -99,7 +90,7 @@ public class TopicController{
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void addArticleToTopic(@PathVariable("id") Integer id, @RequestBody Article article) {
         final Topic topic = getById(id);
-        topicService.addTopic(topic, article);
+        articleServicesFacade.addTopicToArticle(topic, article);
         LOG.debug("Article {} added into topic {}.", article, topic);
     }
 
@@ -115,11 +106,11 @@ public class TopicController{
     public void removeArticleFromTopic(@PathVariable("topicId") Integer topicId,
                                           @PathVariable("articleId") Integer articleId) {
         final Topic topic = getById(topicId);
-        final Article toRemove = articleService.find(articleId);
+        final Article toRemove = articleServicesFacade.findArticleByID(articleId);
         if (toRemove == null) {
             throw NotFoundException.create("Article", articleId);
         }
-        topicService.removeTopic(topic, toRemove);
+        articleServicesFacade.removeTopicFromArticle(topic, toRemove);
         LOG.debug("Article {} removed from topic {}.", toRemove, topic);
     }
 }

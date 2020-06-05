@@ -1,14 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package the.nss.boys.blog.rest;
 
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.*;
+import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import the.nss.boys.blog.builder.ArticleBuilder;
 import the.nss.boys.blog.exception.NotFoundException;
 import the.nss.boys.blog.exception.ValidationException;
 import the.nss.boys.blog.model.Article;
@@ -25,9 +21,7 @@ import the.nss.boys.blog.model.Comment;
 import the.nss.boys.blog.model.Like;
 import the.nss.boys.blog.rest.util.RestUtils;
 import the.nss.boys.blog.security.SecurityUtils;
-import the.nss.boys.blog.service.ArticleService;
-import the.nss.boys.blog.service.CommentService;
-import the.nss.boys.blog.service.LikeService;
+import the.nss.boys.blog.service.ArticleServicesFacade;
 
 /**
  * Rest controller for Article
@@ -39,15 +33,11 @@ import the.nss.boys.blog.service.LikeService;
 public class ArticleController{
     private static final Logger LOG = LoggerFactory.getLogger(ArticleController.class);
 
-    private final ArticleService articleService;
-    private final CommentService commentService;
-    private final LikeService likeService;
+    private final ArticleServicesFacade articleServicesFacade;
 
     @Autowired
-    public ArticleController(ArticleService articleService, CommentService commentService, LikeService likeService){
-        this.articleService = articleService;
-        this.commentService = commentService;
-        this.likeService = likeService;
+    public ArticleController(ArticleServicesFacade articleServicesFacade){
+        this.articleServicesFacade = articleServicesFacade;
     }
 
     /**
@@ -57,7 +47,7 @@ public class ArticleController{
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Article> getAllArticles(){
        final List<Article> articles;
-       articles = articleService.findAll();
+       articles = articleServicesFacade.findAllArticles();
        return articles;
     }
 
@@ -69,9 +59,10 @@ public class ArticleController{
      */
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public Article find(@PathVariable("id") Integer id) {
-        final Article result = articleService.find(id);
+        final Article result = articleServicesFacade.findArticleByID(id);
         if (result == null) {
-            System.out.println("No article with this id.");
+            if(LOG.isDebugEnabled())
+                LOG.debug("No article with: {} id.",id);
         }
         return result;
     }
@@ -84,9 +75,10 @@ public class ArticleController{
     //FIND ARTICLES BY TITLE
     @RequestMapping(value = "/title={title}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Article> findByTitle(@PathVariable("title") String title) {
-        final List<Article> result = articleService.findByTitle(title);
+        final List<Article> result = articleServicesFacade.findArticleByTitle(title);
         if (result == null) {
-            System.out.println("No article with this title.");
+            if(LOG.isDebugEnabled())
+                LOG.debug("No article with: {} title.",title);
         }
         return result;
     }
@@ -100,9 +92,10 @@ public class ArticleController{
      */
     @RequestMapping(value = "/date={date}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Article> findByDate(@PathVariable("date") LocalDate created) {
-        final List<Article> result = articleService.findByDate(created);
+        final List<Article> result = articleServicesFacade.findArticleByDate(created);
         if (result == null) {
-            System.out.println("No article with this date.");
+            if(LOG.isDebugEnabled())
+                LOG.debug("No article with: {} date.", created);
         }
         return result;
     }
@@ -116,10 +109,13 @@ public class ArticleController{
     @PreAuthorize("hasAnyRole('ROLE_ADMIN') or (filterObject.author.username == principal.username)")
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> createArticle(@RequestBody Article article) {
-        System.out.println(LocalDate.now());
-        article.setDate(LocalDate.now());
-        article.setUser(SecurityUtils.getCurrentUser());
-        articleService.persist(article);
+        ArticleBuilder.getInstance().startBuilding();
+        ArticleBuilder.getInstance().addContent(article.getContent());
+        ArticleBuilder.getInstance().addTitle(article.getTitle());
+        ArticleBuilder.getInstance().addDate();
+        ArticleBuilder.getInstance().addTopic(article.getTopics().get(0));
+        ArticleBuilder.getInstance().addUser(SecurityUtils.getCurrentUser());
+        articleServicesFacade.persistArticle(ArticleBuilder.getInstance().getBuiltArticle());
         if (LOG.isDebugEnabled()) {
             LOG.debug("Article {} persisted successfully.", article);
         }
@@ -141,8 +137,9 @@ public class ArticleController{
         if (!original.getId().equals(article.getId())) {
             throw new ValidationException("Article identifier in the data does not match the one in the request URL.");
         }
-        articleService.update(article);
-        LOG.debug("Updated article {}.", article);
+        articleServicesFacade.updateArticle(article);
+        if(LOG.isDebugEnabled())
+            LOG.debug("Updated article {}.", article);
     }
 
     /**
@@ -154,12 +151,13 @@ public class ArticleController{
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
      public void removeArticle(@PathVariable("id") Integer id) {
-        final Article toRemove = articleService.find(id);
+        final Article toRemove =articleServicesFacade.findArticleByID(id);
         if (toRemove == null) {
             return;
         }
-        articleService.remove(toRemove);
-        LOG.debug("Removed article {}.", toRemove);
+        articleServicesFacade.removeArticle(toRemove);
+        if(LOG.isDebugEnabled())
+            LOG.debug("Removed article {}.", toRemove);
     }
 
 
@@ -172,8 +170,9 @@ public class ArticleController{
     @RequestMapping(value = "/{id}/comments", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public void addCommentToArticle(@PathVariable("id") Integer id, @RequestBody Comment comment) {
         final Article article = find(id);
-        articleService.addComment(article, comment);
-        LOG.debug("Comment {} added into article {}.", article, comment);
+        articleServicesFacade.addCommentToArticle(article,comment);
+        if(LOG.isDebugEnabled())
+            LOG.debug("Comment {} added into article {}.", article, comment);
     }
 
 
@@ -189,12 +188,13 @@ public class ArticleController{
     public void removeCommentFromArticle(@PathVariable("commentId") Integer commentId,
                                           @PathVariable("articleId") Integer articleId) {
         final Article article = find(articleId);
-        final Comment toRemove = commentService.find(commentId);
+        final Comment toRemove =articleServicesFacade.findCommentByID(commentId);
         if (toRemove == null) {
             throw NotFoundException.create("Comment", commentId);
         }
-        articleService.removeComment(article, toRemove);
-        LOG.debug("Comment {} removed from article {}.", toRemove, article);
+        articleServicesFacade.removeCommentFromArticle(article,toRemove);
+        if(LOG.isDebugEnabled())
+            LOG.debug("Comment {} removed from article {}.", toRemove, article);
     }
 
     /**
@@ -205,7 +205,7 @@ public class ArticleController{
     //VIEW ARTICLES COMMENTS
     @RequestMapping(value = "/{id}/comments", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
      public List<Comment> getCommentsOfArticle(@PathVariable("id") Integer id) {
-        return commentService.findByArticle(articleService.find(id));
+        return articleServicesFacade.findCommentByArticle(articleServicesFacade.findArticleByID(id));
     }
 
 
@@ -217,12 +217,8 @@ public class ArticleController{
     //VIEW ARTICLES LIKES
     @RequestMapping(value = "/{id}/likes", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<String> getArticleLikes(@PathVariable("id") Integer id){
-        List<Like> likes = likeService.findByArticle(articleService.find(id));
-        List<String> usernames = new ArrayList<>();
-        likes.forEach((like) -> {
-            usernames.add(like.getUser().getUsername());
-        });
-       return usernames;
+        List<Like> likes =articleServicesFacade.findLikesByArticle(articleServicesFacade.findArticleByID(id));
+        return likes.stream().map((l) -> l.getUser().getUsername()).collect(Collectors.toList());
     }
 
     /**
@@ -235,8 +231,9 @@ public class ArticleController{
     @RequestMapping(value = "/{id}/likes", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public void addLikeToArticle(@PathVariable("id") Integer id, @RequestBody Like like) {
         final Article article = find(id);
-        articleService.addLike(article, like);
-        LOG.debug("Like {} added into article {}.", article, like);
+        articleServicesFacade.addLikeToArticle(article,like);
+        if(LOG.isDebugEnabled())
+            LOG.debug("Like {} added into article {}.", article, like);
     }
     
 

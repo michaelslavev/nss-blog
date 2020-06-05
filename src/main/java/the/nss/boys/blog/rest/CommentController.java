@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package the.nss.boys.blog.rest;
 
 import org.slf4j.Logger;
@@ -13,7 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import the.nss.boys.blog.model.Comment;
-import the.nss.boys.blog.service.CommentService;
+import the.nss.boys.blog.service.ArticleServicesFacade;
 
 /**
  * Rest controller for Comment
@@ -26,11 +21,11 @@ public class CommentController{
     
     private static final Logger LOG = LoggerFactory.getLogger(ArticleController.class);
 
-    private final CommentService commentService;
+    private final ArticleServicesFacade articleServicesFacade;
     
     @Autowired
-    public CommentController(CommentService commentService){
-        this.commentService = commentService;
+    public CommentController(ArticleServicesFacade articleServicesFacade){
+        this.articleServicesFacade = articleServicesFacade;
     }
 
     /**
@@ -44,12 +39,14 @@ public class CommentController{
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@PathVariable("id") Integer Id, @RequestBody Comment comment) {
         if (!Id.equals(comment.getId())) {
-            System.out.println("IDs are different.");
+            if (LOG.isDebugEnabled())
+                LOG.debug("IDs are different.");
         }
-        if (commentService.find(Id) == null) {
-            System.out.println("Comment not found.");
+        if (articleServicesFacade.findCommentByID(Id) == null) {
+            if (LOG.isDebugEnabled())
+                LOG.debug("Comment not found.");
         }
-        commentService.update(comment);
+        articleServicesFacade.updateComment(comment);
         if (LOG.isDebugEnabled()) {
             LOG.debug("Comment {} updated.", comment);
         }
@@ -66,12 +63,14 @@ public class CommentController{
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable("id") Integer Id, @RequestBody Comment comment) {
         if (!Id.equals(comment.getId())) {
-            System.out.println("IDs are different.");
+            if (LOG.isDebugEnabled())
+                LOG.debug("IDs are different.");
         }
-        if (commentService.find(Id) == null) {
-            System.out.println("Comment not found.");
+        if (articleServicesFacade.findCommentByID(Id) == null) {
+            if (LOG.isDebugEnabled())
+                LOG.debug("Comment not found.");
         }
-        commentService.remove(comment);
+        articleServicesFacade.removeComment(comment);
         if (LOG.isDebugEnabled()) {
             LOG.debug("Comment {} deleted.", comment);
         }
