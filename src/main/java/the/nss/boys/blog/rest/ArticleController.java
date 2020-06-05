@@ -16,12 +16,15 @@ import org.springframework.web.bind.annotation.*;
 import the.nss.boys.blog.builder.ArticleBuilder;
 import the.nss.boys.blog.exception.NotFoundException;
 import the.nss.boys.blog.exception.ValidationException;
+import the.nss.boys.blog.interceptor.ArticleLoggerInterceptor;
 import the.nss.boys.blog.model.Article;
 import the.nss.boys.blog.model.Comment;
 import the.nss.boys.blog.model.Like;
 import the.nss.boys.blog.rest.util.RestUtils;
 import the.nss.boys.blog.security.SecurityUtils;
 import the.nss.boys.blog.service.ArticleServicesFacade;
+
+import javax.interceptor.Interceptors;
 
 /**
  * Rest controller for Article
@@ -30,6 +33,7 @@ import the.nss.boys.blog.service.ArticleServicesFacade;
  */
 @RestController
 @RequestMapping("/api/articles")
+@Interceptors(ArticleLoggerInterceptor.class)
 public class ArticleController{
     private static final Logger LOG = LoggerFactory.getLogger(ArticleController.class);
 
@@ -60,10 +64,6 @@ public class ArticleController{
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public Article find(@PathVariable("id") Integer id) {
         final Article result = articleServicesFacade.findArticleByID(id);
-        if (result == null) {
-            if(LOG.isDebugEnabled())
-                LOG.debug("No article with: {} id.",id);
-        }
         return result;
     }
 
@@ -76,10 +76,6 @@ public class ArticleController{
     @RequestMapping(value = "/title={title}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Article> findByTitle(@PathVariable("title") String title) {
         final List<Article> result = articleServicesFacade.findArticleByTitle(title);
-        if (result == null) {
-            if(LOG.isDebugEnabled())
-                LOG.debug("No article with: {} title.",title);
-        }
         return result;
     }
     
@@ -93,10 +89,6 @@ public class ArticleController{
     @RequestMapping(value = "/date={date}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Article> findByDate(@PathVariable("date") LocalDate created) {
         final List<Article> result = articleServicesFacade.findArticleByDate(created);
-        if (result == null) {
-            if(LOG.isDebugEnabled())
-                LOG.debug("No article with: {} date.", created);
-        }
         return result;
     }
 
@@ -116,9 +108,6 @@ public class ArticleController{
         ArticleBuilder.getInstance().addTopic(article.getTopics().get(0));
         ArticleBuilder.getInstance().addUser(SecurityUtils.getCurrentUser());
         articleServicesFacade.persistArticle(ArticleBuilder.getInstance().getBuiltArticle());
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Article {} persisted successfully.", article);
-        }
         final HttpHeaders headers = RestUtils.createLocationHeaderFromCurrentUri("/{id}", article.getId());
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
@@ -138,8 +127,6 @@ public class ArticleController{
             throw new ValidationException("Article identifier in the data does not match the one in the request URL.");
         }
         articleServicesFacade.updateArticle(article);
-        if(LOG.isDebugEnabled())
-            LOG.debug("Updated article {}.", article);
     }
 
     /**

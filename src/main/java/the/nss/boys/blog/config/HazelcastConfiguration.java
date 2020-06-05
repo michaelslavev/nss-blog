@@ -14,6 +14,10 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class HazelcastConfiguration {
 
+    /**
+     *
+     * @return map config for services - arclie, commnets, likes, topic
+     */
     @Bean
     public Config hazelCastConfig(){
         return new Config()

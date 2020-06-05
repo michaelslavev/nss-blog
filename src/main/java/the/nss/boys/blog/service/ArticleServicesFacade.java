@@ -12,8 +12,8 @@ import java.util.List;
 
 /**
  * Facade for article related services.
- * Inkoves methods on other services.
  * Layer between REST controllers and services.
+ * Inkoves methods on other services used in this facade. *
  */
 @Service
 public class ArticleServicesFacade {
