@@ -35,49 +35,88 @@ public class ArticleService {
         this.dao = dao;
     }
     @Transactional(readOnly = true)
+
+    /**
+     * Method for finding article by his ID
+     */
     public Article find(Integer id) {
         return dao.find(id);
     }
-    
+
+    /**
+     * Find all Articles
+     */
     @Transactional(readOnly = true)
     @Cacheable()
     public List<Article> findAll() {
         return dao.findAll();
     }
-    
+
+    /**
+     * Find article by topic
+     * @param topic
+     * @return
+     */
     @Transactional(readOnly = true)
     public List<Article> findByTopic(Topic topic) {
         return dao.findByTopic(topic);
     }
-    
+
+    /**
+     * Find article by date
+     * @param date
+     * @return
+     */
     @Transactional(readOnly = true)
     public List<Article> findByDate(LocalDate date) {
         return dao.findByDate(date);
     }
-    
+
+    /**
+     * Find article by title
+     * @param title
+     * @return
+     */
     @Transactional(readOnly = true)
     public List<Article> findByTitle(String title) {
         return dao.findByTitle(title);
     }
-    
 
+    /**
+     * Saves  article to database
+     * @param article
+     */
     @Transactional
     public void persist(Article article) {
         dao.persist(article);
     }
 
+    /**
+     * Updates article
+     * @param article
+     */
     @Transactional
     public void update(Article article) {
         dao.update(article);
     }
-    
+
+    /**
+     * Removes article
+     * @param article
+     */
     @Transactional
     public void remove(Article article) {
         Objects.requireNonNull(article);
         article.setRemoved(true);
         dao.update(article);
     }
-    
+
+
+    /**
+     * Adds comment to article
+     * @param article
+     * @param comment
+     */
     @Transactional
     public void addComment(Article article, Comment comment){
         Objects.requireNonNull(article);
@@ -85,7 +124,12 @@ public class ArticleService {
         article.addComment(comment);
         dao.update(article);
     }
-    
+
+    /**
+     * Removes comment from article
+     * @param article
+     * @param comment
+     */
     @Transactional
     public void removeComment(Article article, Comment comment) {
         Objects.requireNonNull(article);
@@ -93,7 +137,12 @@ public class ArticleService {
         article.removeComment(comment);
         dao.update(article);
     }
-    
+
+    /**
+     * Add like to article
+     * @param article
+     * @param like
+     */
     @Transactional
     public void addLike(Article article, Like like){
         Objects.requireNonNull(article);
@@ -102,7 +151,11 @@ public class ArticleService {
         dao.update(article);
     }
 
-
+    /**
+     * Removes like from article
+     * @param article
+     * @param like
+     */
     @Transactional
     public void removeLike(Article article, Like like) {
         Objects.requireNonNull(article);

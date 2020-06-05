@@ -25,38 +25,64 @@ import org.springframework.transaction.annotation.Transactional;
 public class CommentService {
     
     private final CommentDao dao;
-    
+
     public CommentService (CommentDao dao){
         this.dao = dao;
     }
-    
+
+    /**
+     * Find comments on article
+     * @param article
+     * @return
+     */
     @Transactional(readOnly = true)
     public List<Comment> findByArticle(Article article) {
         return dao.findByArticle(article);
     }
-    
+
+    /**
+     * Find comment by his id
+     * @param id
+     * @return
+     */
     @Transactional(readOnly = true)
     public Comment find(Integer id) {
         return dao.find(id);
     }
-    
+
+    /**
+     * Find all comments
+     * @return
+     */
     @Transactional(readOnly = true)
     @Cacheable()
     public List<Comment> findAll() {
         return dao.findAll();
     }
-    
+
+    /**
+     * Saves comment to database
+     * @param comment
+     */
     @Transactional
     public void persist(Comment comment) {
         Objects.requireNonNull(comment);
         dao.persist(comment);
     }
-    
+
+    /**
+     * Updates comment
+     * @param comment
+     */
     @Transactional
     public void update(Comment comment) {
         dao.update(comment);
     }
-    
+
+    /**
+     * Removes comment
+     * @param comment
+     */
     @Transactional
     public void remove(Comment comment) {
         Objects.requireNonNull(comment);

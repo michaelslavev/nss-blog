@@ -41,6 +41,11 @@ public class SystemInitializer {
         });
     }
 
+    /**
+     * Generates admin with credentials: \n
+     * firstName, lastName, password \n
+     * System, Administrator, admin \n
+     */
     private void generateAdmin() {
         if (userService.exists(ADMIN_USERNAME)) {
             return;

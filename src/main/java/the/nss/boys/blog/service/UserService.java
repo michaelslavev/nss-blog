@@ -45,18 +45,31 @@ public class UserService {
         }
         dao.persist(user);
     }
-    
+
+    /**
+     * Update user
+     * @param user
+     */
     @Transactional
     public void update(User user) {
         dao.update(user);
     }
 
-   
+    /**
+     * Find user by username
+     * @param username
+     * @return
+     */
     @Transactional(readOnly = true)
     public User findByUsername(String username) {
         return dao.findByUsername(username);
     }
 
+    /**
+     * Checks if user exists
+     * @param username
+     * @return
+     */
     @Transactional(readOnly = true)
     public boolean exists(String username) {
         return dao.findByUsername(username) != null;

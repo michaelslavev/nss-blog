@@ -34,13 +34,22 @@ public class TopicService {
         this.dao = dao;
         this.articleDao = articleDao;
     }
-    
+
+    /**
+     * Find all topics
+     * @return
+     */
     @Transactional(readOnly = true)
     @Cacheable()
     public List<Topic> findAll() {
         return dao.findAll();
     }
 
+    /**
+     * Find topic by id
+     * @param id
+     * @return
+     */
     @Transactional(readOnly = true)
     public Topic find(Integer id) {
         return dao.find(id);

@@ -29,34 +29,60 @@ public class LikeService {
     public LikeService (LikeDao dao){
         this.dao = dao;
     }
-    
+
+    /**
+     * Find likes on article
+     * @param article
+     * @return
+     */
     @Transactional(readOnly = true)
     public List<Like> findByArticle(Article article) {
         return dao.findByArticle(article);
     }
-    
+
+    /**
+     * Find like by id
+     * @param id
+     * @return
+     */
     @Transactional(readOnly = true)
     public Like find(Integer id) {
         return dao.find(id);
     }
-    
+
+    /**
+     * Find all likes
+     * @return
+     */
     @Transactional(readOnly = true)
     @Cacheable()
     public List<Like> findAll() {
         return dao.findAll();
     }
-    
+
+    /**
+     * Saves like to database
+     * @param like
+     */
     @Transactional
     public void persist(Like like) {
         Objects.requireNonNull(like);
         dao.persist(like);
     }
-    
+
+    /**
+     * Update like
+     * @param like
+     */
     @Transactional
     public void update(Like like) {
         dao.update(like);
     }
-    
+
+    /**
+     * Removes like
+     * @param like
+     */
     @Transactional
     public void remove(Like like) {
         Objects.requireNonNull(like);
